@@ -20,7 +20,9 @@ public class Area {
     @Column(name = "zipcode")
     private long zipCode;
 
+
     
+
     @OneToMany(mappedBy = "area", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Restaurant> restaurants;
 
