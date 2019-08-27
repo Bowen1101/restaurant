@@ -1,8 +1,8 @@
 package com.ascending.training.bowen.model;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -21,27 +21,27 @@ public class Area {
     private long zipCode;
 
 
-    
+
 
     @OneToMany(mappedBy = "area", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Restaurant> restaurants;
+    private Set<Restaurant> restaurants;
 
     @OneToMany(mappedBy = "area", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Customer> customers;
+    private Set<Customer> customers;
 
-    public List<Restaurant> getRestaurants(){
+    public Set<Restaurant> getRestaurants(){
         return restaurants;
     }
 
-    public void setRestaurants(List<Restaurant> restaurants){
+    public void setRestaurants(Set<Restaurant> restaurants){
         this.restaurants = restaurants;
     }
 
-    public List<Customer> getCustomers(){
+    public Set<Customer> getCustomers(){
         return customers;
     }
 
-    public void setCustomers(List<Customer> customers){
+    public void setCustomers(Set<Customer> customers){
         this.customers = customers;
     }
 

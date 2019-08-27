@@ -7,12 +7,12 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
 
-
+@Repository
 public class AreaDaoImpl implements AreaDao {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -86,7 +86,7 @@ public class AreaDaoImpl implements AreaDao {
 
     @Override
     public List<Area> getAreas() {
-        String hql = "FROM Area";
+        String hql = "FROM Area as a left join fetch a.restaurants as res left join fetch res.merchants as mer left join fetch a.customers";
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Area> query = session.createQuery(hql);
             return query.list();
@@ -98,7 +98,7 @@ public class AreaDaoImpl implements AreaDao {
     public Area getAreaByName(String areaName) {
         if (areaName == null) return null;
 
-        String hql = "FROM Area as a where lower(a.areaName) = :name";
+        String hql = "FROM Area as a left join fetch a.restaurants as res left join fetch res.merchants as mer left join fetch a.customers where lower(a.areaName) = :name ";
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Area> query = session.createQuery(hql);

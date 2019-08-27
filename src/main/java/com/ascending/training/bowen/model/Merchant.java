@@ -1,6 +1,8 @@
 package com.ascending.training.bowen.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,6 +26,7 @@ public class Merchant {
 //    @Column(name="restaurant_id")
 //    private long restaurantId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;

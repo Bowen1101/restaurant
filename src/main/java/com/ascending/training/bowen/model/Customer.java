@@ -1,5 +1,7 @@
 package com.ascending.training.bowen.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,6 +25,8 @@ public class Customer {
 //    @Column(name="area_id")
 //    private long areaId;
 
+
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "area_id")
     private Area area;

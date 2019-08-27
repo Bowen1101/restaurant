@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.List;
 
 public class RestaurantDaoImplTest {
-    private RestaurantDaoImpl restuantDaoImpl;
+    private RestaurantDaoImpl restaurantDaoImpl;
     private Restaurant a = new Restaurant();
     private String expectedRestaurantName = "Test";
     private Area area = new Area();
@@ -23,7 +23,7 @@ public class RestaurantDaoImplTest {
     @Before
     public void init(){
 
-        restuantDaoImpl = new RestaurantDaoImpl();
+        restaurantDaoImpl = new RestaurantDaoImpl();
         a.setName(expectedRestaurantName);
         a.setCategory("Test");
         a.setAddress("Test");
@@ -32,13 +32,13 @@ public class RestaurantDaoImplTest {
         area = areaDaoImpl.getAreaByName("Crystal City");
         a.setArea(area);
 //        a.setAreaId(2);
-        restuantDaoImpl.save(a);
+        restaurantDaoImpl.save(a);
     }
 
     @Test
     public void saveTest(){
         int expectedNumOfRestaurant = 3;
-        List<Restaurant> restaurants = restuantDaoImpl.getRestaurants();
+        List<Restaurant> restaurants = restaurantDaoImpl.getRestaurants();
         Assert.assertEquals(expectedNumOfRestaurant, restaurants.size());
     }
 
@@ -51,32 +51,32 @@ public class RestaurantDaoImplTest {
 
     @Test
     public void deleteTest(){
-        restuantDaoImpl.delete(expectedRestaurantName);
+        restaurantDaoImpl.delete(expectedRestaurantName);
         int expectedNumOfRestaurant = 2;
-        List<Restaurant> restaurants = restuantDaoImpl.getRestaurants();
+        List<Restaurant> restaurants = restaurantDaoImpl.getRestaurants();
         Assert.assertEquals(expectedNumOfRestaurant, restaurants.size());
     }
 
     @Test
     public void getRestaurantTest(){
-        List<Restaurant> restaurants = restuantDaoImpl.getRestaurants();
+        List<Restaurant> restaurants = restaurantDaoImpl.getRestaurants();
         int expectedNumOfRestaurant = 3;
         Assert.assertEquals(expectedNumOfRestaurant, restaurants.size());
     }
 
     @Test
     public void getRestaurantByName(){
-        Restaurant b = restuantDaoImpl.getRestaurantByName(expectedRestaurantName);
+        Restaurant b = restaurantDaoImpl.getRestaurantByName(expectedRestaurantName);
         Assert.assertEquals(expectedRestaurantName,b.getName());
     }
 
     @After
     public void cleanup() {
-        if (restuantDaoImpl.getRestaurantByName(expectedRestaurantName)!=null){
-            restuantDaoImpl.delete(expectedRestaurantName);
+        if (restaurantDaoImpl.getRestaurantByName(expectedRestaurantName)!=null){
+            restaurantDaoImpl.delete(expectedRestaurantName);
         }
 
-        restuantDaoImpl = null;
+        restaurantDaoImpl = null;
         areaDaoImpl = null;
     }
 

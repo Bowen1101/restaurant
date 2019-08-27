@@ -1,8 +1,10 @@
 package com.ascending.training.bowen.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="restaurants")
@@ -23,18 +25,19 @@ public class Restaurant {
 //    @Column(name="area_id")
 //    private long areaId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "area_id")
     private Area area;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Merchant> merchants;
+    private Set<Merchant> merchants;
 
-    public List<Merchant> getMerchants(){
+    public Set<Merchant> getMerchants(){
         return merchants;
     }
 
-    public void setMerchants(List<Merchant> merchants){
+    public void setMerchants(Set<Merchant> merchants){
         this.merchants = merchants;
     }
 

@@ -1,6 +1,5 @@
 package com.ascending.training.repository;
 
-
 import com.ascending.training.bowen.model.Area;
 import com.ascending.training.bowen.repository.AreaDaoImpl;
 import org.junit.After;
@@ -30,7 +29,6 @@ public class AreaDaoImplTest {
         List<Area> areas = areaDaoImpl.getAreas();
         Assert.assertEquals(expectedNumOfArea, areas.size());
     }
-
 
     @Test
     public void updateTest(){

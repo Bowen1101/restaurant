@@ -16,7 +16,7 @@ public class MerchantDaoImplTest {
     private Merchant a = new Merchant();
     private String expectedNameOfMerchant = "Test";
     private Restaurant restaurant = new Restaurant();
-    private RestaurantDaoImpl resturantDaoImpl = new RestaurantDaoImpl();
+    private RestaurantDaoImpl restaurantDaoImpl = new RestaurantDaoImpl();
 
     @Before
     public void init(){
@@ -27,7 +27,7 @@ public class MerchantDaoImplTest {
         a.setEmail("CCC");
         a.setTel("111");
         a.setAddress("DDD");
-        restaurant = resturantDaoImpl.getRestaurantByName("Young Chow");
+        restaurant = restaurantDaoImpl.getRestaurantByName("Young Chow");
         a.setRestaurant(restaurant);
 //        a.setResturantId(1);
         merchantDaoImpl.save(a);
@@ -74,6 +74,6 @@ public class MerchantDaoImplTest {
             merchantDaoImpl.delete(expectedNameOfMerchant);
         }
         merchantDaoImpl = null;
-        resturantDaoImpl = null;
+        restaurantDaoImpl = null;
     }
 }
