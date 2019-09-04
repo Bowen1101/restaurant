@@ -1,6 +1,7 @@
 package com.ascending.training.bowen.repository;
 
 import com.ascending.training.bowen.model.Merchant;
+import com.ascending.training.bowen.model.Restaurant;
 import com.ascending.training.bowen.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -38,12 +39,61 @@ public class MerchantDaoImpl implements MerchantDao {
     }
 
     @Override
+    public boolean save(Merchant merchant, String restaurantName) {
+        Transaction transaction = null;
+        boolean isSuccess = true;
+        RestaurantDaoImpl restaurantDao = new RestaurantDaoImpl();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Restaurant restaurant = restaurantDao.getRestaurantByName(restaurantName);
+            merchant.setRestaurant(restaurant);
+            session.save(merchant);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            isSuccess = false;
+            if (transaction != null) transaction.rollback();
+            logger.debug(e.getMessage());
+        }
+
+        if (isSuccess) logger.debug(String.format("The merchant %s was inserted into the table.",merchant.toString()));
+
+        return isSuccess;
+    }
+
+    @Override
     public boolean update(Merchant merchant) {
         Transaction transaction = null;
         boolean isSuccess = true;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+            session.saveOrUpdate(merchant);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            isSuccess = false;
+            if (transaction != null) transaction.rollback();
+            logger.debug(e.getMessage());
+        }
+
+        if (isSuccess) logger.debug(String.format("The merchant %s was updated",merchant.toString()));
+
+        return isSuccess;
+    }
+
+    @Override
+    public boolean update(Merchant merchant, String restaurantName, String merchantName) {
+        Transaction transaction = null;
+        boolean isSuccess = true;
+        RestaurantDaoImpl restaurantDao = new RestaurantDaoImpl();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Restaurant restaurant = restaurantDao.getRestaurantByName(restaurantName);
+            merchant.setRestaurant(restaurant);
+            merchant.setName(merchantName);
             session.saveOrUpdate(merchant);
             transaction.commit();
         }

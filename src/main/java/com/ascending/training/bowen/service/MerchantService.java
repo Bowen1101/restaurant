@@ -17,8 +17,16 @@ public class MerchantService {
         return merchantDao.save(merchant);
     }
 
+    public boolean save(Merchant merchant, String restaurantName){
+        return merchantDao.save(merchant, restaurantName);
+    }
+
     public boolean update(Merchant merchant){
         return merchantDao.update(merchant);
+    }
+
+    public boolean update(Merchant merchant, String restaurantName, String merchantName){
+        return merchantDao.update(merchant, restaurantName, merchantName);
     }
 
     public boolean delete(String merchantName){

@@ -1,5 +1,6 @@
 package com.ascending.training.bowen.repository;
 
+import com.ascending.training.bowen.model.Area;
 import com.ascending.training.bowen.model.Restaurant;
 import com.ascending.training.bowen.util.HibernateUtil;
 import org.hibernate.Session;
@@ -38,6 +39,30 @@ public class RestaurantDaoImpl implements RestaurantDao{
     }
 
     @Override
+    public boolean save(Restaurant restaurant, String areaName) {
+        Transaction transaction = null;
+        boolean isSuccess = true;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            AreaDaoImpl areaDaoImpl = new AreaDaoImpl();
+            Area area = areaDaoImpl.getAreaByName(areaName);
+            restaurant.setArea(area);
+            session.save(restaurant);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            isSuccess = false;
+            if (transaction != null) transaction.rollback();
+            logger.error(e.getMessage());
+        }
+
+        if (isSuccess) logger.debug(String.format("The restaurant %s was inserted into the table.", restaurant.toString()));
+
+        return isSuccess;
+    }
+
+    @Override
     public boolean update(Restaurant restaurant) {
         Transaction transaction = null;
         boolean isSuccess= true;
@@ -56,6 +81,32 @@ public class RestaurantDaoImpl implements RestaurantDao{
         if (isSuccess) logger.debug(String.format("The restaurant $s was updated", restaurant.toString()));
 
         return isSuccess;
+    }
+
+    @Override
+    public boolean update(Restaurant restaurant, String areaName, String name) {
+        Transaction transaction = null;
+        boolean isSuccess= true;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession() ) {
+            transaction = session.beginTransaction();
+            AreaDaoImpl areaDaoImpl = new AreaDaoImpl();
+            Area area = areaDaoImpl.getAreaByName(areaName);
+            restaurant.setArea(area);
+            restaurant.setName(name);
+            session.saveOrUpdate(restaurant);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            isSuccess = false;
+            if (transaction != null) transaction.rollback();
+            logger.error(e.getMessage());
+        }
+
+        if (isSuccess) logger.debug(String.format("The restaurant $s was updated", restaurant.toString()));
+
+        return isSuccess;
+
     }
 
     @Override
@@ -84,7 +135,7 @@ public class RestaurantDaoImpl implements RestaurantDao{
 
     @Override
     public List<Restaurant> getRestaurants() {
-        String hql = "FROM Restaurant";
+        String hql = "FROM Restaurant as res left join fetch res.merchants";
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             Query<Restaurant> query = session.createQuery(hql);
             return query.list();
@@ -95,7 +146,7 @@ public class RestaurantDaoImpl implements RestaurantDao{
     public Restaurant getRestaurantByName(String restaurantName) {
         if (restaurantName == null) return null;
 
-        String hql = "FROM Restaurant as restaurant where lower(restaurant.name) = :name";
+        String hql = "FROM Restaurant as res left join fetch res.merchants where lower(res.name) = :name";
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Restaurant> query = session.createQuery(hql);

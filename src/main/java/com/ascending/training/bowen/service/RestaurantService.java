@@ -17,6 +17,14 @@ public class RestaurantService {
         return restaurantDao.save(restaurant);
     }
 
+    public boolean save(Restaurant restaurant, String areaname) {
+        return restaurantDao.save(restaurant, areaname);
+    }
+
+    public boolean update(Restaurant restaurant, String areaName, String name) {
+        return restaurantDao.update(restaurant, areaName, name);
+    }
+
     public boolean update(Restaurant restaurant){
         return restaurantDao.update(restaurant);
     }

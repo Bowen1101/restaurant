@@ -6,6 +6,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -101,5 +102,37 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(name,email,password);
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if(this == obj){
+            return true;
+        }
+        if(obj == null) {
+            return false;
+        }
+        if(this.getClass() != obj.getClass()){
+            return false;
+        }
+        User other = (User) obj;
+//        if (!(id==other.id)){
+//            return false;
+//        }
+        if(!name.equals(other.name)){
+            return false;
+        }
+        if(!email.equals(other.email)){
+            return false;
+        }
+        if(!password.equals(other.password)){
+            return false;
+        }
+        return true;
     }
 }

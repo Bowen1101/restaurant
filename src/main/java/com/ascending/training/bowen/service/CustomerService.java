@@ -16,8 +16,16 @@ public class CustomerService {
         return customerDao.save(customer);
     }
 
+    public boolean save(Customer customer, String areaName){
+        return customerDao.save(customer,areaName);
+    }
+
     public boolean update(Customer customer){
         return customerDao.update(customer);
+    }
+
+    public boolean update(Customer customer, String areaName, String customerName){
+        return customerDao.update(customer, areaName, customerName);
     }
 
     public boolean delete(String customerName){

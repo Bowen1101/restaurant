@@ -1,5 +1,6 @@
 package com.ascending.training.bowen.repository;
 
+import com.ascending.training.bowen.model.Area;
 import com.ascending.training.bowen.model.Customer;
 import com.ascending.training.bowen.util.HibernateUtil;
 import org.hibernate.Session;
@@ -38,12 +39,61 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     @Override
+    public boolean save(Customer customer, String areaName) {
+        Transaction transaction = null;
+        boolean isSuccess = true;
+        AreaDaoImpl areaDaoImpl = new AreaDaoImpl();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Area area = areaDaoImpl.getAreaByName(areaName);
+            customer.setArea(area);
+            session.save(customer);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            isSuccess = false;
+            if (transaction != null) transaction.rollback();
+            logger.error(e.getMessage());
+        }
+
+        if (isSuccess) logger.debug(String.format("The customer %s was inserted into the table.",customer.toString()));
+
+        return isSuccess;
+    }
+
+    @Override
     public boolean update(Customer customer) {
         Transaction transaction = null;
         boolean isSuccess = true;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+            session.saveOrUpdate(customer);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            isSuccess = false;
+            if (transaction != null) transaction.rollback();
+            logger.error(e.getMessage());
+        }
+
+        if (isSuccess) logger.debug(String.format("The customer %s was updated",customer.toString()));
+
+        return isSuccess;
+    }
+
+    @Override
+    public boolean update(Customer customer, String areaName, String customerName) {
+        Transaction transaction = null;
+        boolean isSuccess = true;
+        AreaDaoImpl areaDaoImpl = new AreaDaoImpl();
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Area area = areaDaoImpl.getAreaByName(areaName);
+            customer.setArea(area);
+            customer.setName(customerName);
             session.saveOrUpdate(customer);
             transaction.commit();
         }

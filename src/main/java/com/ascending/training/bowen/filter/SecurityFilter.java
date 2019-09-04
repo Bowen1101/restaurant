@@ -12,12 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import java.util.logging.LogRecord;
-
 
 @WebFilter(filterName = "securityFilter", urlPatterns = {"/*"}, dispatcherTypes = {DispatcherType.REQUEST})
 public class SecurityFilter implements Filter {
-    private static String AUTH_URI = "/auth";
+        private static String AUTH_URI = "/auth";
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -50,7 +48,8 @@ public class SecurityFilter implements Filter {
                 case "DELETE" : allowedResources = (String)claims.get("allowedDeleteResources"); break;
             }
             for (String s : allowedResources.split(",")) {
-                if (!s.trim().matches("^/")) continue;
+                if (!s.trim().startsWith("/")) continue;
+                logger.info("***********" + s);
                 if (uri.trim().toLowerCase().startsWith(s.trim().toLowerCase())) {
                     statusCode = HttpServletResponse.SC_ACCEPTED;
                     break;
