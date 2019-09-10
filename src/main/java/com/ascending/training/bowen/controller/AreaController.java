@@ -14,8 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = {"/areas"})
 public class AreaController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    @Autowired
+    private Logger logger;
     @Autowired
     private AreaService areaService;
 

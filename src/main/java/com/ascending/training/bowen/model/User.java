@@ -1,9 +1,5 @@
 package com.ascending.training.bowen.model;
 
-
-
-import org.apache.commons.codec.digest.DigestUtils;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -121,9 +117,9 @@ public class User {
             return false;
         }
         User other = (User) obj;
-//        if (!(id==other.id)){
-//            return false;
-//        }
+////        if (!(id==other.id)){
+////            return false;
+////        }
         if(!name.equals(other.name)){
             return false;
         }

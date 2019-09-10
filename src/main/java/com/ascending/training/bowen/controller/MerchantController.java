@@ -14,8 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = {"/merchants"})
 public class MerchantController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    @Autowired
+    private Logger logger;
     @Autowired
     private MerchantService merchantService;
 

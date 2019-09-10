@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(value = {"/auth"})
 public class Authentication {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private Logger logger;
     @Autowired
     private UserService userService;
     private String errorMsg = "The email or password is not correct.";

@@ -46,7 +46,6 @@ public class AreaServiceTest {
         Assert.assertEquals(expectedNumOfArea, areas.size());
     }
 
-
     @Test
     public void updateTest(){
         a.setStateName("VA");
