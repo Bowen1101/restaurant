@@ -1,5 +1,5 @@
 insert into role (name, allowed_resource, allowed_read, allowed_create, allowed_update, allowed_delete) values
-('Admin', '/areas,/restaurants/,/merchants,/customers', 'Y', 'Y', 'Y', 'Y'),
+('Admin', '/', 'Y', 'Y', 'Y', 'Y'),
 ('Manager', '/areas,/restaurants,/merchants,/customers', 'Y', 'Y', 'Y', 'N'),
 ('user', '/merchants,/customers', 'Y', 'N', 'N', 'N')
 ;
