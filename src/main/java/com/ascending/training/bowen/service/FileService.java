@@ -1,9 +1,9 @@
 package com.ascending.training.bowen.service;
 
 import com.amazonaws.HttpMethod;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class FileService {
@@ -23,7 +24,23 @@ public class FileService {
     @Autowired private AmazonS3 amazonS3;
 
     public void createBucket(String bucketName){
+        logger.info("Cresting a bucket " + bucketName);
         if(! amazonS3.doesBucketExistV2(bucketName)) amazonS3.createBucket(bucketName);
+    }
+
+    public List<Bucket> listBuckets() {
+        return amazonS3.listBuckets();
+    }
+
+    public boolean deleteBucket(String bucketName){
+        boolean isSuccess = false;
+        if(amazonS3.doesBucketExistV2(bucketName)){
+            amazonS3.deleteBucket(bucketName);
+            isSuccess = true;
+        }
+
+        logger.info("delete: " +isSuccess);
+        return isSuccess;
     }
 
     public String getFileUrl(String bucketName, String fileName){
@@ -54,6 +71,46 @@ public class FileService {
         return getFileUrl(bucketName, file.getOriginalFilename());
     }
 
+    public boolean deleteFile(String bucketName, String fileName){
+        boolean isSuccess = false;
+        try{
+            if (!amazonS3.doesObjectExist(bucketName, fileName)) {
+                logger.info(String.format("The file name=%s does not exist in the bucket %s", fileName, bucketName));
+                return isSuccess;
+            }
+            amazonS3.deleteObject(bucketName,fileName);
+            isSuccess = true;
+        }
+        catch (Exception e) {
+            logger.error(e.getMessage());
+            return isSuccess;
+        }
+        return isSuccess;
+    }
+
+    public List<S3ObjectSummary> listFiles(String bucketName){
+        try {
+            if (!amazonS3.doesBucketExistV2(bucketName)) {
+                logger.info(String.format("The bucket %s does not exist", bucketName));
+                return null;
+            }
+            ListObjectsV2Request listObjectsV2Request = new ListObjectsV2Request().withBucketName(bucketName);
+            ListObjectsV2Result result;
+            do {
+                result = amazonS3.listObjectsV2(listObjectsV2Request);
+                for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
+                    System.out.printf(" - %s (size: %d)\n", objectSummary.getKey(), objectSummary.getSize());
+                }
+            }
+            while (result.isTruncated());
+        }catch (AmazonS3Exception e){
+            e.getMessage();
+        }catch (SdkClientException e){
+            e.getMessage();
+        }
+        return amazonS3.listObjectsV2(new ListObjectsV2Request().withBucketName(bucketName)).getObjectSummaries();
+    }
+
     public boolean saveFile(MultipartFile multipartFile, String filePath){
         boolean isSuccess = false;
 
@@ -68,9 +125,6 @@ public class FileService {
         catch (Exception e){
             logger.error(e.getMessage());
         }
-
         return isSuccess;
     }
-
-
 }

@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 
 
-
-
 @SpringBootApplication(scanBasePackages = {"com.ascending.training.bowen"})
 @ServletComponentScan(basePackages = {"com.ascending.training.bowen.filter"})
 public class AppInitializer {
