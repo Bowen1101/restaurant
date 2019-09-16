@@ -23,9 +23,16 @@ public class FileService {
     @Autowired private Logger logger;
     @Autowired private AmazonS3 amazonS3;
 
-    public void createBucket(String bucketName){
-        logger.info("Cresting a bucket " + bucketName);
-        if(! amazonS3.doesBucketExistV2(bucketName)) amazonS3.createBucket(bucketName);
+    public boolean createBucket(String bucketName){
+        boolean isSuccess = false;
+        logger.info("Creating a bucket " + bucketName);
+        if( amazonS3.doesBucketExistV2(bucketName)) {
+            return isSuccess;
+        }else{
+            amazonS3.createBucket(bucketName);
+            isSuccess = true;
+        }
+        return isSuccess;
     }
 
     public List<Bucket> listBuckets() {

@@ -67,8 +67,8 @@ public class FileServiceTest {
 
     @Test
     public void createBucketTest(){
-        List<Bucket> result= fileService.listBuckets();
-        Assert.assertEquals(result.size(),2);
+        boolean result = fileService.createBucket(bucketName);
+        Assert.assertFalse(result);
     }
 
     @Test
